@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
+import os
 import sys
 import re
 import requests
 from pathlib import Path
 from urllib.parse import urlparse
-import pdfkit
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
 BASE_DIR = Path(sys.argv[0]).parent / "archive"
 AUTH_TOKEN = open(Path(sys.argv[0]).parent / ".token").read().strip()
-CMD = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --headless --incognito --print-to-pdf='{fn}' '{url}' 2> /dev/null"
+CMD = r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --headless --incognito --print-to-pdf='{fn}' '{url}' 2> /dev/null"
+DMBOT_URL = os.environ.get("DMBOT_URL")  # cron job monitoring with https://t.me/dead_man_switch_bot
+
 
 def recent():
     url = f"https://api.pinboard.in/v1/posts/recent?format=json&auth_token={AUTH_TOKEN}"
@@ -38,3 +40,6 @@ BASE_DIR.mkdir(parents=True, exist_ok=True)
 
 with ThreadPoolExecutor(max_workers=4) as executor:
     list(map(save_entry, recent()))
+
+if DMBOT_URL:
+    requests.get(DMBOT_URL)
