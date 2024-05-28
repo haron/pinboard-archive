@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 BASE_DIR = Path(sys.argv[0]).parent / "archive"
 AUTH_TOKEN = open(Path(sys.argv[0]).parent / ".token").read().strip()
-CMD = r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --headless --incognito --print-to-pdf='{fn}' '{url}' 2> /dev/null"
+CMD = r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --headless --incognito --print-to-pdf='{fn}' '{url}' 2> /dev/null || true"
 DMBOT_URL = os.environ.get("DMBOT_URL")  # cron job monitoring with https://t.me/dead_man_switch_bot
 
 
